@@ -1,11 +1,9 @@
 package top.offsetmonkey538.offsetconfig538.parsing;
 
-import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
-import top.offsetmonkey538.offsetconfig538.serialization.OffsetConfigSerializer;
-import top.offsetmonkey538.offsetconfig538.util.ArrayUtils;
-
 import java.util.Arrays;
 import java.util.Map;
+import top.offsetmonkey538.offsetconfig538.serialization.OffsetConfigSerializer;
+import top.offsetmonkey538.offsetconfig538.util.ArrayUtils;
 
 public record VeryCoolObjectWithArray(int[] firstArray, String[] secondArray) {
 

@@ -1,9 +1,7 @@
 package top.offsetmonkey538.offsetconfig538.parsing;
 
-import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
-import top.offsetmonkey538.offsetconfig538.serialization.OffsetConfigSerializer;
-
 import java.util.Map;
+import top.offsetmonkey538.offsetconfig538.serialization.OffsetConfigSerializer;
 
 public record VeryCoolObject(int anInteger, float aFloat, boolean aTrueBoolean, boolean aFalseBoolean, String aString) {
 
