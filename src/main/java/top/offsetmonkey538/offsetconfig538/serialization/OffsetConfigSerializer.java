@@ -1,9 +1,8 @@
 package top.offsetmonkey538.offsetconfig538.serialization;
 
-import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
-
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
+import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
 
 public interface OffsetConfigSerializer<T> {
 
