@@ -11,7 +11,7 @@ public record VeryCoolObjectWithArray(int[] firstArray, String[] secondArray) {
 
     public static class VeryCoolObjectWithArraySerializer implements OffsetConfigSerializer<VeryCoolObjectWithArray> {
         @Override
-        public VeryCoolObjectWithArray deserialize(Map<String, Object> entries) throws OffsetConfigException {
+        public VeryCoolObjectWithArray deserialize(Map<String, Object> entries) {
             return new VeryCoolObjectWithArray(
                     ArrayUtils.castToInt(entries.get("firstArray")),
                     ArrayUtils.castTo(entries.get("secondArray"), String.class)

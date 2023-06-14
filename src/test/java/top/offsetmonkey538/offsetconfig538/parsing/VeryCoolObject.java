@@ -9,7 +9,7 @@ public record VeryCoolObject(int anInteger, float aFloat, boolean aTrueBoolean, 
 
     public static class VeryCoolObjectSerializer implements OffsetConfigSerializer<VeryCoolObject> {
         @Override
-        public VeryCoolObject deserialize(Map<String, Object> entries) throws OffsetConfigException {
+        public VeryCoolObject deserialize(Map<String, Object> entries) {
             return new VeryCoolObject(
                     (Integer) entries.get("anInteger"),
                     (Float) entries.get("aFloat"),
