@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Stack;
 import top.offsetmonkey538.offsetconfig538.OffsetConfig538;
 import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
+import top.offsetmonkey538.offsetconfig538.serialization.OffsetConfigSerializer;
 
 public class Parser {
     private int currentLineNumber;
@@ -148,6 +149,48 @@ public class Parser {
         }
 
         throw new OffsetConfigException("Invalid value '%s' in array at line '%s'!", value, currentLineNumber);
+    }
+
+    private Object parseObject(String type) throws OffsetConfigException {
+        Map<String, Object> objectContent = new LinkedHashMap<>();
+
+        int numObjectOpen = 1;
+        int numObjectClose = 0;
+
+        // Increment current line as we don't want to
+        // continuously parse this object and get a stack overflow.
+        currentLineNumber++;
+
+        for (; currentLineNumber < lines.length; currentLineNumber++) {
+            String line = lines[currentLineNumber].trim();
+
+            // Increment object open and close counters.
+            if (line.endsWith(OffsetConfig538.OBJECT_OPEN)) numObjectOpen++;
+            if (line.endsWith(OffsetConfig538.OBJECT_CLOSE)) numObjectClose++;
+
+            // The object is finished when we encounter
+            // an equal number of open and close characters.
+            if (numObjectOpen == numObjectClose) break;
+
+            // Nesting isn't supported in objects.
+            if (line.endsWith(OffsetConfig538.BLOCK_START_INDICATOR)) throw new OffsetConfigException("Expected value of type '%s' in object at line '%s', but got a block start!", type, currentLineNumber);
+
+            // Skip array and object endings as those aren't values.
+            if (line.endsWith(OffsetConfig538.OBJECT_CLOSE) || line.endsWith(OffsetConfig538.ARRAY_CLOSE)) continue;
+
+            // Parse the value.
+            String key = getKey(line);
+            objectContent.put(key, parseValue(line));
+        }
+
+        // Get the serializer for the type.
+        OffsetConfigSerializer<?> serializer = offsetConfig538.getSerializer(type);
+
+        // Check if the serializer wasn't found and throw an error.
+        if (serializer == null) throw new OffsetConfigException("No deserializer found for type '%s'!", type);
+
+        // Use the serializer to turn the object content into the actual object.
+        return serializer.deserialize(objectContent);
     }
 
     private int getIndentation(String line) {
