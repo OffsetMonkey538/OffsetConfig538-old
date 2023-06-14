@@ -9,16 +9,31 @@ import top.offsetmonkey538.offsetconfig538.OffsetConfig538;
 import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
 import top.offsetmonkey538.offsetconfig538.serialization.OffsetConfigSerializer;
 
+/**
+ * Used to parse OffsetConfig content.
+ */
 public class Parser {
     private int currentLineNumber;
     private String[] lines;
 
     private final OffsetConfig538 offsetConfig538;
 
+    /**
+     * Constructs a new Parser.
+     *
+     * @param offsetConfig538 the {@link OffsetConfig538} for this parser. Used to get serializers.
+     */
     public Parser(OffsetConfig538 offsetConfig538) {
         this.offsetConfig538 = offsetConfig538;
     }
 
+    /**
+     * Parses the provided config content into a map of String key to Object value.
+     *
+     * @param content The config content. Should contain line endings.
+     * @return the provided content as a map of String key to Object value.
+     * @throws OffsetConfigException when something goes wrong when parsing the content.
+     */
     public Map<String, Object> parse(String content) throws OffsetConfigException {
         final Map<String, Object> entries = new LinkedHashMap<>();
 
@@ -66,6 +81,13 @@ public class Parser {
         return entries;
     }
 
+    /**
+     * Parses the provided line into an Object.
+     *
+     * @param line the line of config content. Should be a key-value pair
+     * @return the provided line as an Object.
+     * @throws OffsetConfigException when something goes wrong when parsing the content.
+     */
     private Object parseValue(String line) throws OffsetConfigException {
         // The value starts after the equals sign and ends at the end of the line.
         String valueString = line.substring(
@@ -111,6 +133,14 @@ public class Parser {
         throw new OffsetConfigException("Invalid value '%s' at line '%s'!", valueString, currentLineNumber);
     }
 
+    /**
+     * Parses an array in the config into an Object array.
+     * Continues reading the config until the end of the array is reached.
+     *
+     * @param type the type of the array content.
+     * @return an Object array from the config.
+     * @throws OffsetConfigException when something goes wrong when parsing the content.
+     */
     private Object[] parseArray(String type) throws OffsetConfigException {
         List<Object> arrayContent = new ArrayList<>();
 
@@ -136,6 +166,14 @@ public class Parser {
         return arrayContent.toArray();
     }
 
+    /**
+     * Parses an array value of the provided type.
+     *
+     * @param value The value to be parsed.
+     * @param type The type the value should be.
+     * @return the provided value as an Object.
+     * @throws OffsetConfigException when something goes wrong when parsing the content.
+     */
     private Object parseArrayValue(String value, String type) throws OffsetConfigException {
         // Handle array of objects
         if (value.equals(OffsetConfig538.OBJECT_OPEN)) return parseObject(type);
@@ -151,6 +189,14 @@ public class Parser {
         throw new OffsetConfigException("Invalid value '%s' in array at line '%s'!", value, currentLineNumber);
     }
 
+    /**
+     * Parses an object in the config into an Object.
+     * Continues reading the config until the end of the object is reached.
+     *
+     * @param type the type of the object.
+     * @return an Object from the config.
+     * @throws OffsetConfigException when something goes wrong when parsing the content.
+     */
     private Object parseObject(String type) throws OffsetConfigException {
         Map<String, Object> objectContent = new LinkedHashMap<>();
 
@@ -193,11 +239,24 @@ public class Parser {
         return serializer.deserialize(objectContent);
     }
 
+    /**
+     * Gets the indentation of the provided line.
+     *
+     * @param line The line to get the indentation of.
+     * @return The indentation level of the provided line.
+     */
     private int getIndentation(String line) {
         int amountOfSpaces = line.length() - line.stripLeading().length();
         return amountOfSpaces / OffsetConfig538.INDENTATION_SIZE;
     }
 
+    /**
+     * Gets the key of the provided line.
+     *
+     * @param line The line to get the key of.
+     * @return The key of the line.
+     * @throws OffsetConfigException when something goes wrong when parsing the content.
+     */
     private String getKey(String line) throws OffsetConfigException {
         // The end of the key is either a key-value
         // delimiter or a block start indicator.
