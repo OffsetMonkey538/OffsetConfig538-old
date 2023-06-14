@@ -1,6 +1,8 @@
 package top.offsetmonkey538.offsetconfig538.parsing;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import top.offsetmonkey538.offsetconfig538.OffsetConfig538;
@@ -106,6 +108,46 @@ public class Parser {
         }
 
         throw new OffsetConfigException("Invalid value '%s' at line '%s'!", valueString, currentLineNumber);
+    }
+
+    private Object[] parseArray(String type) throws OffsetConfigException {
+        List<Object> arrayContent = new ArrayList<>();
+
+        // Increment current line as the current line
+        // contains the definition for this array.
+        currentLineNumber++;
+
+        for (; currentLineNumber < lines.length; currentLineNumber++) {
+            String line = lines[currentLineNumber].trim();
+
+            // Arrays of arrays aren't supported.
+            if (line.endsWith(OffsetConfig538.ARRAY_OPEN)) throw new OffsetConfigException("Expected value of type '%s' in array at line '%s', but got another array!", type, currentLineNumber);
+            // Nesting isn't supported in arrays.
+            if (line.endsWith(OffsetConfig538.BLOCK_START_INDICATOR)) throw new OffsetConfigException("Expected value of type '%s' in array at line '%s', but got a block start!", type, currentLineNumber);
+            // Array close is the end of an array.
+            if (line.endsWith(OffsetConfig538.ARRAY_CLOSE)) break;
+
+            // Parse the value and put it into the array content.
+            arrayContent.add(parseArrayValue(line, type));
+        }
+
+        // Return the arrayContent as an array.
+        return arrayContent.toArray();
+    }
+
+    private Object parseArrayValue(String value, String type) throws OffsetConfigException {
+        // Handle array of objects
+        if (value.equals(OffsetConfig538.OBJECT_OPEN)) return parseObject(type);
+
+        if (type.equals("int")) return Integer.parseInt(value);
+        if (type.equals("float")) return Float.parseFloat(value);
+        if (type.equals("boolean")) return Boolean.parseBoolean(value);
+        if (type.equals("string")) {
+            if (value.startsWith("\"") && value.endsWith("\"")) return value.substring(1, value.length() - 1);
+            throw new OffsetConfigException("Expected double quotes (\") around string array value '%s' at line '%s'!", value, currentLineNumber);
+        }
+
+        throw new OffsetConfigException("Invalid value '%s' in array at line '%s'!", value, currentLineNumber);
     }
 
     private int getIndentation(String line) {
