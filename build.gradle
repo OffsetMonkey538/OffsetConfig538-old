@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
 group = 'top.offsetmonkey538.offsetconfig538'
@@ -16,4 +17,12 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        maven (MavenPublication) {
+            from components.java
+        }
+    }
 }
