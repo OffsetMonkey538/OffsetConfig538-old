@@ -22,6 +22,14 @@ public interface OffsetConfigSerializer<T> {
      */
     T deserialize(Map<String, Object> entries) throws OffsetConfigException;
 
+    @SuppressWarnings("unchecked")
+    default void serializeFromObject(Map<String, Object> entries, Object value) throws OffsetConfigException {
+        if (!value.getClass().isAssignableFrom(getTypeClass())) throw new OffsetConfigException("Value '%s' not instance of '%s'!", value, getTypeClass());
+        serialize(entries, (T) value);
+    }
+    
+    void serialize(Map<String, Object> entries, T value) throws OffsetConfigException;
+
     /**
      * Get the <code>type</code> this serializer serializes.
      *
