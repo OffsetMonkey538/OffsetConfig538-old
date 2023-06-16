@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import top.offsetmonkey538.offsetconfig538.OffsetConfig538;
 import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject;
 import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithArray;
+import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithObject;
 import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
 import top.offsetmonkey538.offsetconfig538.generating.ConfigEntry;
 
@@ -544,6 +545,48 @@ public class GeneratorTest {
         );
 
         offsetConfig538.addSerializer(new VeryCoolObjectWithArray.VeryCoolObjectWithArraySerializer());
+        runTest(input, expectedOutput);
+    }
+
+    @Test
+    public void parseObjectWithObjectWithArray() throws OffsetConfigException {
+        String expectedOutput = """
+                veryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithObject {
+                    anInteger = 1234
+                    coolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithArray {
+                        firstArray = Tint [
+                            1234
+                            4321
+                            6789
+                            9876
+                        ]
+                        secondArray = Tstring [
+                            "Hello, World!"
+                            "Goodbye, World!"
+                        ]
+                    }
+                }
+                """;
+        Map<String, Object> input = new LinkedHashMap<>();
+        input.put("veryCoolObject", new VeryCoolObjectWithObject(
+                1234,
+                new VeryCoolObjectWithArray(
+                        new int[]{
+                                1234,
+                                4321,
+                                6789,
+                                9876
+                        },
+                        new String[]{
+                                "Hello, World!",
+                                "Goodbye, World!"
+                        }
+                )
+        ));
+
+        offsetConfig538.addSerializer(new VeryCoolObjectWithObject.VeryCoolObjectSerializer());
+        offsetConfig538.addSerializer(new VeryCoolObjectWithArray.VeryCoolObjectWithArraySerializer());
+
         runTest(input, expectedOutput);
     }
 
