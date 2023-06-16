@@ -1,7 +1,8 @@
-package top.offsetmonkey538.offsetconfig538.parsing;
+package top.offsetmonkey538.offsetconfig538.exampleClasses;
 
 import java.util.Arrays;
 import java.util.Map;
+import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
 import top.offsetmonkey538.offsetconfig538.serialization.OffsetConfigSerializer;
 import top.offsetmonkey538.offsetconfig538.util.ArrayUtils;
 
@@ -14,6 +15,12 @@ public record VeryCoolObjectWithArray(int[] firstArray, String[] secondArray) {
                     ArrayUtils.castToInt(entries.get("firstArray")),
                     ArrayUtils.castTo(entries.get("secondArray"), String.class)
             );
+        }
+
+        @Override
+        public void serialize(Map<String, Object> entries, VeryCoolObjectWithArray value) throws OffsetConfigException {
+            entries.put("firstArray", value.firstArray());
+            entries.put("secondArray", value.secondArray());
         }
     }
 

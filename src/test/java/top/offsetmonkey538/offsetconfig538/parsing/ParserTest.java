@@ -2,6 +2,8 @@ package top.offsetmonkey538.offsetconfig538.parsing;
 
 import org.junit.jupiter.api.Test;
 import top.offsetmonkey538.offsetconfig538.OffsetConfig538;
+import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject;
+import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithArray;
 import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
 import top.offsetmonkey538.offsetconfig538.util.ArrayUtils;
 
@@ -295,14 +297,14 @@ public class ParserTest {
     @Test
     public void parseObjects() throws OffsetConfigException {
         String config = """
-                veryCoolObject = Ttop.offsetmonkey538.offsetconfig538.parsing.VeryCoolObject {
+                veryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject {
                     anInteger = 1234
                     aFloat = 12.34
                     aTrueBoolean = true
                     aFalseBoolean = false
                     aString = "Hello, World!"
                 }
-                anotherVeryCoolObject = Ttop.offsetmonkey538.offsetconfig538.parsing.VeryCoolObject {
+                anotherVeryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject {
                     anInteger = 4321
                     aFloat = 43.21
                     aTrueBoolean = true
@@ -335,14 +337,14 @@ public class ParserTest {
     public void parseNestedObjects() throws OffsetConfigException {
         String config = """
                 veryCoolObjects:
-                    veryCoolObject = Ttop.offsetmonkey538.offsetconfig538.parsing.VeryCoolObject {
+                    veryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject {
                         anInteger = 1234
                         aFloat = 12.34
                         aTrueBoolean = true
                         aFalseBoolean = false
                         aString = "Hello, World!"
                     }
-                    anotherVeryCoolObject = Ttop.offsetmonkey538.offsetconfig538.parsing.VeryCoolObject {
+                    anotherVeryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject {
                         anInteger = 4321
                         aFloat = 43.21
                         aTrueBoolean = true
@@ -374,7 +376,7 @@ public class ParserTest {
     @Test
     public void parseObjectWithArray() throws OffsetConfigException {
         String config = """
-                veryCoolObject = Ttop.offsetmonkey538.offsetconfig538.parsing.VeryCoolObjectWithArray {
+                veryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithArray {
                     firstArray = Tint [
                         1234
                         4321
@@ -409,7 +411,7 @@ public class ParserTest {
     @Test
     public void parseObjectArray() throws OffsetConfigException {
         String config = """
-                myObjectArray = Ttop.offsetmonkey538.offsetconfig538.parsing.VeryCoolObject [
+                myObjectArray = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject [
                     {
                         anInteger = 1234
                         aFloat = 12.34
@@ -467,7 +469,7 @@ public class ParserTest {
     @Test
     public void parseObjectWithArrayArray() throws OffsetConfigException {
         String config = """
-                myObjectArray = Ttop.offsetmonkey538.offsetconfig538.parsing.VeryCoolObjectWithArray [
+                myObjectArray = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithArray [
                     {
                         firstArray = Tint [
                             1
