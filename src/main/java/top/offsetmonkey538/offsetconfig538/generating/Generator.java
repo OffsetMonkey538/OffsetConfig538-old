@@ -217,6 +217,7 @@ public class Generator {
 
     /**
      * Get the type of the provided value.
+     *
      * @param value the value whose type to get.
      * @return The name of <code>value</code>s class. Exceptions are "string" for String, "int" for Integer, "float" for Float and "boolean" for Boolean.
      */
