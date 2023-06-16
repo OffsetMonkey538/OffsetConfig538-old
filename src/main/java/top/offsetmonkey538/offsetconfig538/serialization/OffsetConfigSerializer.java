@@ -22,12 +22,37 @@ public interface OffsetConfigSerializer<T> {
      */
     T deserialize(Map<String, Object> entries) throws OffsetConfigException;
 
+    /**
+     * Serializes the provided Object value into the provided entries Map.
+     * <br>
+     * Checks if <code>value</code> is of the generic type {@link T} and calls the {@link #serialize(Map, T)} method.
+     *
+     * @param entries The entries map to put the data into.
+     * @param value The value to serialize.
+     * @throws OffsetConfigException When <code>value</code> isn't of the generic type {@link T} or when something goes wrong while serializing.
+     */
     @SuppressWarnings("unchecked")
     default void serializeFromObject(Map<String, Object> entries, Object value) throws OffsetConfigException {
         if (!value.getClass().isAssignableFrom(getTypeClass())) throw new OffsetConfigException("Value '%s' not instance of '%s'!", value, getTypeClass());
         serialize(entries, (T) value);
     }
-    
+
+    /**
+     * Serializes the provided Object value into the provided entries Map.
+     * <br>
+     * Example implementation:
+     * <pre> {@code
+     *      public void serialize(Map<String, Object> entries, MyCoolClass value) throws OffsetConfigException {
+     *          entries.put("veryCoolValue", value.getVeryCoolValue));
+     *          entries.put("anotherCoolValue", value.getAnotherCoolValue());
+     *      }
+     * }
+     * </pre>
+     *
+     * @param entries The entries map to put the data into.
+     * @param value The value to serialize.
+     * @throws OffsetConfigException When something goes wrong while serializing.
+     */
     void serialize(Map<String, Object> entries, T value) throws OffsetConfigException;
 
     /**

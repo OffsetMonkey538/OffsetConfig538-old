@@ -7,15 +7,33 @@ import top.offsetmonkey538.offsetconfig538.OffsetConfig538;
 import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
 import top.offsetmonkey538.offsetconfig538.serialization.OffsetConfigSerializer;
 
+/**
+ * Used for generating OffsetConfig.
+ */
 public class Generator {
 
     private final OffsetConfig538 offsetConfig538;
     private final String lineSeparator = System.lineSeparator();
 
+    /**
+     * Constructs a new Generator.
+     *
+     * @param offsetConfig538 The {@link OffsetConfig538} instance to use. Used for getting serializers.
+     */
     public Generator(OffsetConfig538 offsetConfig538) {
         this.offsetConfig538 = offsetConfig538;
     }
 
+    /**
+     * Generates OffsetConfig from the provided map of String to Object.
+     * <br>
+     * This method uses plain {@link Object Objects} instead of {@link ConfigEntry ConfigEntries} so it does not support comments. For comment support see {@link #generateFromConfigEntries(Map)}
+     *
+     * @param entries The map containing the entries.
+     * @return OffsetConfig from the provided map.
+     * @throws OffsetConfigException when something goes wrong while generating.
+     * @see #generateFromConfigEntries(Map)
+     */
     public String generateFromObjects(Map<String, Object> entries) throws OffsetConfigException {
         Map<String, ConfigEntry> configEntries = new LinkedHashMap<>();
 
@@ -26,6 +44,16 @@ public class Generator {
         return generateFromConfigEntries(configEntries);
     }
 
+    /**
+     * Generates OffsetConfig from the provided map of String to Object.
+     * <br>
+     * Unlike {@link #generateFromObjects(Map)}, this method uses {@link ConfigEntry ConfigEntries} and thus supports comments.
+     *
+     * @param entries The map containing the entries.
+     * @return OffsetConfig from the provided map. Also includes comments.
+     * @throws OffsetConfigException when something goes wrong while generating.
+     * @see #generateFromObjects(Map)
+     */
     public String generateFromConfigEntries(Map<String, ConfigEntry> entries) throws OffsetConfigException {
         StringBuilder builder = new StringBuilder();
 
@@ -67,6 +95,14 @@ public class Generator {
         return builder.toString();
     }
 
+    /**
+     * Generates OffsetConfig from the provided value.
+     *
+     * @param value The value to generate OffsetConfig from.
+     * @param indentationLevel The current indentation level.
+     * @return OffsetConfig from the provided value.
+     * @throws OffsetConfigException when something goes wrong while generating.
+     */
     private String generateValue(Object value, int indentationLevel) throws OffsetConfigException {
         // Strings are surrounded by double quotes (").
         if (value instanceof String) return "\"" + value + "\"";
@@ -82,6 +118,14 @@ public class Generator {
         return type + generateObject(value, indentationLevel);
     }
 
+    /**
+     * Generates OffsetConfig from the provided array.
+     *
+     * @param value The array to generate OffsetConfig from.
+     * @param indentationLevel The current indentation level.
+     * @return OffsetConfig from the provided array.
+     * @throws OffsetConfigException when something goes wrong while generating.
+     */
     private String generateArray(Object value, int indentationLevel) throws OffsetConfigException {
         StringBuilder builder = new StringBuilder();
 
@@ -103,6 +147,14 @@ public class Generator {
         return builder.toString();
     }
 
+    /**
+     * Generates OffsetConfig from the provided array entry.
+     *
+     * @param value The array entry to generate OffsetConfig from.
+     * @param indentationLevel The current indentation level.
+     * @return OffsetConfig from the provided array entry.
+     * @throws OffsetConfigException when something goes wrong while generating.
+     */
     private String generateArrayValue(Object value, int indentationLevel) throws OffsetConfigException {
         if (value instanceof String) return "\"" + value + "\"";
         if (value instanceof Integer) return value.toString();
@@ -112,6 +164,14 @@ public class Generator {
         return generateObject(value, indentationLevel);
     }
 
+    /**
+     * Generates OffsetConfig from the provided object.
+     *
+     * @param value The object to generate OffsetConfig from.
+     * @param indentationLevel The current indentation level.
+     * @return OffsetConfig from the provided array entry.
+     * @throws OffsetConfigException when something goes wrong while generating.
+     */
     private String generateObject(Object value, int indentationLevel) throws OffsetConfigException {
         StringBuilder builder = new StringBuilder();
 
@@ -145,10 +205,21 @@ public class Generator {
         return builder.toString();
     }
 
+    /**
+     * Get the indentation for the provided indentation level.
+     *
+     * @param indentationLevel The indentation level.
+     * @return indentation for the provided indentation level.
+     */
     private String getIndentation(int indentationLevel) {
         return " ".repeat(indentationLevel * OffsetConfig538.INDENTATION_SIZE);
     }
 
+    /**
+     * Get the type of the provided value.
+     * @param value the value whose type to get.
+     * @return The name of <code>value</code>s class. Exceptions are "string" for String, "int" for Integer, "float" for Float and "boolean" for Boolean.
+     */
     private String getType(Object value) {
         Class<?> valueType = value.getClass();
         if (valueType.isArray()) valueType = valueType.getComponentType();

@@ -87,6 +87,11 @@ public class OffsetConfig538 {
         return new Parser(this);
     }
 
+    /**
+     * Creates a new {@link Generator}.
+     *
+     * @return a new {@link Generator}.
+     */
     public Generator getGenerator() {
         return new Generator(this);
     }
