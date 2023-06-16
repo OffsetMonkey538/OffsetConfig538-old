@@ -15,6 +15,18 @@ public interface OffsetConfigSerializer<T> {
 
     /**
      * Creates a new instance of <code>T</code> from the provided entries.
+     * <br>
+     * Example implementation:
+     * <pre> {@code
+     *      public MyCoolClass deserialize(Map<String, Object> entries) throws OffsetConfigException {
+     *          return new MyCoolClass(
+     *              (Integer) entries.get("veryCoolValue"),
+     *              (String) entries.get("anotherCoolValue"),
+     *              ArrayUtils.castToInt(entries.get("thisIsAnArray"))
+     *          );
+     *      }
+     * }
+     * </pre>
      *
      * @param entries The entries to construct the object from.
      * @return a new object of type T.
@@ -45,6 +57,7 @@ public interface OffsetConfigSerializer<T> {
      *      public void serialize(Map<String, Object> entries, MyCoolClass value) throws OffsetConfigException {
      *          entries.put("veryCoolValue", value.getVeryCoolValue));
      *          entries.put("anotherCoolValue", value.getAnotherCoolValue());
+     *          entries.put("thisIsAnArray", value.getThisIsAnArray());
      *      }
      * }
      * </pre>
