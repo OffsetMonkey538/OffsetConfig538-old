@@ -2,6 +2,7 @@ package top.offsetmonkey538.offsetconfig538;
 
 import java.util.HashMap;
 import java.util.Map;
+import top.offsetmonkey538.offsetconfig538.generating.Generator;
 import top.offsetmonkey538.offsetconfig538.parsing.Parser;
 import top.offsetmonkey538.offsetconfig538.serialization.OffsetConfigSerializer;
 
@@ -84,5 +85,9 @@ public class OffsetConfig538 {
      */
     public Parser getParser() {
         return new Parser(this);
+    }
+
+    public Generator getGenerator() {
+        return new Generator(this);
     }
 }
