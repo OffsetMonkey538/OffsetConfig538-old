@@ -64,7 +64,7 @@ public class Parser {
             // Get our key
             String key = getKey(line);
             if (!parentStack.isEmpty()) {
-                key = parentStack.peek() + "." + key;
+                key = parentStack.peek() + OffsetConfig538.KEY_SEPARATOR + key;
             }
 
             // Check if we are a parent and add ourselves to the parent stack.

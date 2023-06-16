@@ -46,6 +46,10 @@ public class OffsetConfig538 {
      * The character that prefixes a comment.
      */
     public static final String COMMENT_PREFIX = "#";
+    /**
+     * The character that separates keys in nested structures.
+     */
+    public static final String KEY_SEPARATOR = ".";
 
 
     private final Map<String, OffsetConfigSerializer<?>> serializers = new HashMap<>();
