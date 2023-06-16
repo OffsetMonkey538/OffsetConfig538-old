@@ -1,9 +1,11 @@
 package top.offsetmonkey538.offsetconfig538.generating;
 
+import java.lang.reflect.Array;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import top.offsetmonkey538.offsetconfig538.OffsetConfig538;
 import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
+import top.offsetmonkey538.offsetconfig538.serialization.OffsetConfigSerializer;
 
 public class Generator {
 
@@ -63,5 +65,66 @@ public class Generator {
         }
 
         return builder.toString();
+    }
+
+    private String generateValue(Object value, int indentationLevel) throws OffsetConfigException {
+        // Strings are surrounded by double quotes (").
+        if (value instanceof String) return "\"" + value + "\"";
+        if (value instanceof Integer) return value.toString();
+        if (value instanceof Float) return value.toString();
+        if (value instanceof Boolean) return value.toString();
+
+        // Get the type for the value
+        String type = OffsetConfig538.TYPE_PREFIX + getType(value) + " ";
+
+        // Return the type and value.
+        if (value.getClass().isArray()) return type + generateArray(value, indentationLevel);
+        return type + generateObject(value, indentationLevel);
+    }
+
+    private String generateArray(Object value, int indentationLevel) throws OffsetConfigException {
+        StringBuilder builder = new StringBuilder();
+
+        // Append array open character.
+        builder.append(OffsetConfig538.ARRAY_OPEN).append(lineSeparator);
+
+        for (int i = 0; i < Array.getLength(value); i++) {
+            // Append indentation inside of array
+            builder.append(getIndentation(indentationLevel + 1));
+
+            // Append value of array
+            builder.append(generateArrayValue(Array.get(value, i), indentationLevel + 1)).append("\n");
+        }
+
+        // Append indentation and array close character.
+        builder.append(getIndentation(indentationLevel)).append(OffsetConfig538.ARRAY_CLOSE);
+
+
+        return builder.toString();
+    }
+
+    private String generateArrayValue(Object value, int indentationLevel) throws OffsetConfigException {
+        if (value instanceof String) return "\"" + value + "\"";
+        if (value instanceof Integer) return value.toString();
+        if (value instanceof Float) return value.toString();
+        if (value instanceof Boolean) return value.toString();
+
+        return generateObject(value, indentationLevel);
+    }
+
+    private String getIndentation(int indentationLevel) {
+        return " ".repeat(indentationLevel * OffsetConfig538.INDENTATION_SIZE);
+    }
+
+    private String getType(Object value) {
+        Class<?> valueType = value.getClass();
+        if (valueType.isArray()) valueType = valueType.getComponentType();
+
+        if (valueType == String.class) return "string";
+        if (valueType == Integer.class) return "int";
+        if (valueType == Float.class) return "float";
+        if (valueType == Boolean.class) return "boolean";
+
+        return valueType.getName();
     }
 }
