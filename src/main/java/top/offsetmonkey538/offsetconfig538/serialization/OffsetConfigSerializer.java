@@ -37,7 +37,7 @@ public interface OffsetConfigSerializer<T> {
     /**
      * Serializes the provided Object value into the provided entries Map.
      * <br>
-     * Checks if <code>value</code> is of the generic type {@link T} and calls the {@link #serialize(Map, T)} method.
+     * Checks if <code>value</code> is of the generic type {@link T} and calls the {@link #serialize(Map, Object) serialize(Map, T)} method.
      *
      * @param entries The entries map to put the data into.
      * @param value The value to serialize.
