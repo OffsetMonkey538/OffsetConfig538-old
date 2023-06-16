@@ -112,6 +112,39 @@ public class Generator {
         return generateObject(value, indentationLevel);
     }
 
+    private String generateObject(Object value, int indentationLevel) throws OffsetConfigException {
+        StringBuilder builder = new StringBuilder();
+
+        // Append object open character.
+        builder.append(OffsetConfig538.OBJECT_OPEN).append(lineSeparator);
+
+        // Get the serializer
+        String type = getType(value);
+        OffsetConfigSerializer<?> serializer = offsetConfig538.getSerializer(type);
+        if (serializer == null) throw new OffsetConfigException("No serializer found for type '%s'!", type);
+
+        Map<String, Object> entries = new LinkedHashMap<>();
+        serializer.serializeFromObject(entries, value);
+
+        for (Map.Entry<String, Object> entry : entries.entrySet()) {
+            // Append indentation inside of object
+            builder.append(getIndentation(indentationLevel + 1));
+
+
+            // Append the key
+            builder.append(entry.getKey()).append(" ").append(OffsetConfig538.KEY_VALUE_DELIMITER).append(" ");
+
+            // Append the object
+            builder.append(generateValue(entry.getValue(), indentationLevel + 1)).append(lineSeparator);
+        }
+
+        // Append indentation and array close character.
+        builder.append(getIndentation(indentationLevel)).append(OffsetConfig538.OBJECT_CLOSE);
+
+
+        return builder.toString();
+    }
+
     private String getIndentation(int indentationLevel) {
         return " ".repeat(indentationLevel * OffsetConfig538.INDENTATION_SIZE);
     }
