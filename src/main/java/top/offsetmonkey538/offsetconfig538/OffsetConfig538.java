@@ -73,13 +73,21 @@ public class OffsetConfig538 {
     /**
      * Used to get the serializer for the provided type.
      *
-     * @param type the type the serializer should be.
+     * @param type the type the serializer should be for.
      * @return the serializer for the provided type.
+     * @see #getSerializerByTypeClass(Class)
      */
     public OffsetConfigSerializer<?> getSerializerByType(String type) {
         return this.serializersByType.get(type);
     }
 
+    /**
+     * Used to get the serializer for the provided type class.
+     *
+     * @param typeClass the type class the serializer should be for.
+     * @return the serializer for the provided type class.
+     * @see #getSerializerByType(String)
+     */
     public OffsetConfigSerializer<?> getSerializerByTypeClass(Class<?> typeClass) {
         return this.serializersByTypeClass.get(typeClass);
     }
