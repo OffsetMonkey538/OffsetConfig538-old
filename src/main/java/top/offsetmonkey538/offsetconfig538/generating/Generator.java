@@ -3,6 +3,7 @@ package top.offsetmonkey538.offsetconfig538.generating;
 import java.lang.reflect.Array;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import top.offsetmonkey538.offsetconfig538.ConfigEntryWithComment;
 import top.offsetmonkey538.offsetconfig538.OffsetConfig538;
 import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
 import top.offsetmonkey538.offsetconfig538.serialization.OffsetConfigSerializer;
@@ -27,7 +28,7 @@ public class Generator {
     /**
      * Generates OffsetConfig from the provided map of String to Object.
      * <br>
-     * This method uses plain {@link Object Objects} instead of {@link ConfigEntry ConfigEntries} so it does not support comments. For comment support see {@link #generateFromConfigEntries(Map)}
+     * This method uses plain {@link Object Objects} instead of {@link ConfigEntryWithComment ConfigEntries} so it does not support comments. For comment support see {@link #generateFromConfigEntries(Map)}
      *
      * @param entries The map containing the entries.
      * @return OffsetConfig from the provided map.
@@ -35,10 +36,10 @@ public class Generator {
      * @see #generateFromConfigEntries(Map)
      */
     public String generateFromObjects(Map<String, Object> entries) throws OffsetConfigException {
-        Map<String, ConfigEntry> configEntries = new LinkedHashMap<>();
+        Map<String, ConfigEntryWithComment> configEntries = new LinkedHashMap<>();
 
         for (Map.Entry<String, Object> entry : entries.entrySet()) {
-            configEntries.put(entry.getKey(), new ConfigEntry(entry.getValue()));
+            configEntries.put(entry.getKey(), new ConfigEntryWithComment(entry.getValue()));
         }
 
         return generateFromConfigEntries(configEntries);
@@ -47,21 +48,21 @@ public class Generator {
     /**
      * Generates OffsetConfig from the provided map of String to Object.
      * <br>
-     * Unlike {@link #generateFromObjects(Map)}, this method uses {@link ConfigEntry ConfigEntries} and thus supports comments.
+     * Unlike {@link #generateFromObjects(Map)}, this method uses {@link ConfigEntryWithComment ConfigEntries} and thus supports comments.
      *
      * @param entries The map containing the entries.
      * @return OffsetConfig from the provided map. Also includes comments.
      * @throws OffsetConfigException when something goes wrong while generating.
      * @see #generateFromObjects(Map)
      */
-    public String generateFromConfigEntries(Map<String, ConfigEntry> entries) throws OffsetConfigException {
+    public String generateFromConfigEntries(Map<String, ConfigEntryWithComment> entries) throws OffsetConfigException {
         StringBuilder builder = new StringBuilder();
 
         int lastIndentationLevel = 0;
 
         // Loop through all entries
-        for (Map.Entry<String, ConfigEntry> entry : entries.entrySet()) {
-            ConfigEntry configEntry = entry.getValue();
+        for (Map.Entry<String, ConfigEntryWithComment> entry : entries.entrySet()) {
+            ConfigEntryWithComment configEntry = entry.getValue();
             String comment = configEntry.comment();
             Object value = configEntry.value();
 

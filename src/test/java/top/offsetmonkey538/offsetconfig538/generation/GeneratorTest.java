@@ -8,7 +8,7 @@ import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject;
 import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithArray;
 import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithObject;
 import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
-import top.offsetmonkey538.offsetconfig538.generating.ConfigEntry;
+import top.offsetmonkey538.offsetconfig538.ConfigEntryWithComment;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,12 +48,12 @@ public class GeneratorTest {
                 # A string value
                 aString = "Hello, World!"
                 """;
-        Map<String, ConfigEntry> input = new LinkedHashMap<>();
-        input.put("anInteger", new ConfigEntry("An integer value", 1234));
-        input.put("aFloat", new ConfigEntry("A float value", 12.34f));
-        input.put("aTrueBoolean", new ConfigEntry("A boolean value that's true", true));
-        input.put("aFalseBoolean", new ConfigEntry("A boolean value that's false", false));
-        input.put("aString", new ConfigEntry("A string value", "Hello, World!"));
+        Map<String, ConfigEntryWithComment> input = new LinkedHashMap<>();
+        input.put("anInteger", new ConfigEntryWithComment("An integer value", 1234));
+        input.put("aFloat", new ConfigEntryWithComment("A float value", 12.34f));
+        input.put("aTrueBoolean", new ConfigEntryWithComment("A boolean value that's true", true));
+        input.put("aFalseBoolean", new ConfigEntryWithComment("A boolean value that's false", false));
+        input.put("aString", new ConfigEntryWithComment("A string value", "Hello, World!"));
 
         runTestWithComments(input, expectedOutput);
     }
@@ -597,7 +597,7 @@ public class GeneratorTest {
 
         assertEquals(expectedOutput, actualOutput);
     }
-    private void runTestWithComments(Map<String, ConfigEntry> input, String expectedOutput) throws OffsetConfigException {
+    private void runTestWithComments(Map<String, ConfigEntryWithComment> input, String expectedOutput) throws OffsetConfigException {
         String actualOutput = offsetConfig538.getGenerator().generateFromConfigEntries(input);
 
         assertEquals(expectedOutput, actualOutput);

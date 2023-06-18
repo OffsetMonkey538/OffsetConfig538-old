@@ -1,19 +1,19 @@
-package top.offsetmonkey538.offsetconfig538.generating;
+package top.offsetmonkey538.offsetconfig538;
 
 /**
- * Represents an entry in OffsetConfig.
+ * Represents an entry in OffsetConfig with a comment.
  *
  * @param comment The comment for the entry.
  * @param value The value for the entry.
  */
-public record ConfigEntry(String comment, Object value) {
+public record ConfigEntryWithComment(String comment, Object value) {
 
     /**
      * Constructs a new ConfigEntry with an empty comment.
      *
      * @param value The value for the entry
      */
-    public ConfigEntry(Object value) {
+    public ConfigEntryWithComment(Object value) {
         this("", value);
     }
 }

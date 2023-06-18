@@ -5,9 +5,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import top.offsetmonkey538.offsetconfig538.ConfigEntryWithComment;
 import top.offsetmonkey538.offsetconfig538.OffsetConfig538;
 import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
-import top.offsetmonkey538.offsetconfig538.generating.ConfigEntry;
 import top.offsetmonkey538.offsetconfig538.serialization.OffsetConfigSerializer;
 
 /**
@@ -37,18 +37,18 @@ public class Parser {
      * @see #parse(String)
      */
     public Map<String, Object> parseWithoutComments(String content) throws OffsetConfigException {
-        final Map<String, ConfigEntry> entries = parse(content);
+        final Map<String, ConfigEntryWithComment> entries = parse(content);
         final Map<String, Object> entriesWithoutComments = new LinkedHashMap<>(entries.size());
 
-        for (Map.Entry<String, ConfigEntry> entry : entries.entrySet()) {
+        for (Map.Entry<String, ConfigEntryWithComment> entry : entries.entrySet()) {
             entriesWithoutComments.put(entry.getKey(), entry.getValue().value());
         }
 
         return entriesWithoutComments;
     }
 
-    public Map<String, ConfigEntry> parse(String content) throws OffsetConfigException {
-        final Map<String, ConfigEntry> entries = new LinkedHashMap<>();
+    public Map<String, ConfigEntryWithComment> parse(String content) throws OffsetConfigException {
+        final Map<String, ConfigEntryWithComment> entries = new LinkedHashMap<>();
 
         // Split content at CR/LF (Windows line-ending) or LF (Unix line-ending).
         this.lines = content.split("\\r?\\n");
@@ -97,7 +97,7 @@ public class Parser {
 
             // Parse the value and add it to the entries map
             Object value = parseValue(line);
-            entries.put(key, new ConfigEntry(comment, value));
+            entries.put(key, new ConfigEntryWithComment(comment, value));
         }
 
         return entries;
