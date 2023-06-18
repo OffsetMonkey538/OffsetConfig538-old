@@ -47,6 +47,14 @@ public class Parser {
         return entriesWithoutComments;
     }
 
+    /**
+     * Parses the provided config content into a map of String key to {@link ConfigEntryWithComment} value.
+     *
+     * @param content The config content. Should contain line endings.
+     * @return the provided content as a map of String key to {@link ConfigEntryWithComment} value.
+     * @throws OffsetConfigException when something goes wrong when parsing the content.
+     * @see #parseWithoutComments(String)
+     */
     public Map<String, ConfigEntryWithComment> parse(String content) throws OffsetConfigException {
         final Map<String, ConfigEntryWithComment> entries = new LinkedHashMap<>();
 
