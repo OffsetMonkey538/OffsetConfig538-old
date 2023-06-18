@@ -80,6 +80,36 @@ public class GeneratorTest {
     }
 
     @Test
+    public void generateNestedBasicValuesWithComments() throws OffsetConfigException {
+        String expectedOutput = """
+                # A block containing an integer and a float
+                iHaveAnIntegerAndAFloat:
+                    # An integer value
+                    anInteger = 1234
+                    # A float value
+                    aFloat = 12.34
+                # A boolean value that's true
+                aTrueBoolean = true
+                # A block containing a boolean and a string
+                iHaveABooleanAndAString:
+                    # A boolean value that's false
+                    aFalseBoolean = false
+                    # A string value
+                    aString = "Hello, World!"
+                """;
+        Map<String, ConfigEntryWithComment> input = new LinkedHashMap<>();
+        input.put("iHaveAnIntegerAndAFloat", new ConfigEntryWithComment("A block containing an integer and a float"));
+        input.put("iHaveAnIntegerAndAFloat.anInteger", new ConfigEntryWithComment("An integer value", 1234));
+        input.put("iHaveAnIntegerAndAFloat.aFloat", new ConfigEntryWithComment("A float value", 12.34f));
+        input.put("aTrueBoolean", new ConfigEntryWithComment("A boolean value that's true", true));
+        input.put("iHaveABooleanAndAString", new ConfigEntryWithComment("A block containing a boolean and a string"));
+        input.put("iHaveABooleanAndAString.aFalseBoolean", new ConfigEntryWithComment("A boolean value that's false", false));
+        input.put("iHaveABooleanAndAString.aString", new ConfigEntryWithComment("A string value", "Hello, World!"));
+
+        runTestWithComments(input, expectedOutput);
+    }
+
+    @Test
     public void generateMultiNestedBasicValues() throws OffsetConfigException {
         String expectedOutput = """
                 iHaveAnIntegerAndANestedFloat:

@@ -99,6 +99,7 @@ public class Parser {
 
             // Check if we are a parent and add ourselves to the parent stack.
             if (trimmedLine.endsWith(OffsetConfig538.BLOCK_START_INDICATOR)) {
+                entries.put(key, new ConfigEntryWithComment(comment));
                 parentStack.push(key);
                 continue;
             }

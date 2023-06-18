@@ -70,25 +70,33 @@ public class Generator {
             String[] keys = entry.getKey().split("\\" + OffsetConfig538.KEY_SEPARATOR);
             int indentationLevel = keys.length - 1;
 
+            // Append comment if it exists
+            if (!"".equals(comment)) {
+                builder.append(getIndentation(indentationLevel)).append(OffsetConfig538.COMMENT_PREFIX).append(" ").append(comment).append(lineSeparator);
+            }
+
             // Deal with parents
+            if (value == null) {
+                lastIndentationLevel = indentationLevel++;
+            }
+
             if (lastIndentationLevel < indentationLevel) {
                 for (int i = lastIndentationLevel; i < indentationLevel; i++) {
                     builder.append(getIndentation(i)).append(keys[i]).append(OffsetConfig538.BLOCK_START_INDICATOR).append(lineSeparator);
                 }
             }
 
-            // Append comment if it exists
-            if (!"".equals(comment)) {
-                builder.append(getIndentation(indentationLevel)).append(OffsetConfig538.COMMENT_PREFIX).append(" ").append(comment).append(lineSeparator);
+            // If the value is null it means it's just the start of a block.
+            if (value != null) {
+                builder
+                        .append(getIndentation(indentationLevel))
+                        .append(keys[keys.length - 1])
+                        .append(" ")
+                        .append(OffsetConfig538.KEY_VALUE_DELIMITER)
+                        .append(" ")
+                        .append(generateValue(value, indentationLevel))
+                        .append(lineSeparator);
             }
-            builder
-                    .append(getIndentation(indentationLevel))
-                    .append(keys[keys.length - 1])
-                    .append(" ")
-                    .append(OffsetConfig538.KEY_VALUE_DELIMITER)
-                    .append(" ")
-                    .append(generateValue(value, indentationLevel))
-                    .append(lineSeparator);
 
             lastIndentationLevel = indentationLevel;
         }

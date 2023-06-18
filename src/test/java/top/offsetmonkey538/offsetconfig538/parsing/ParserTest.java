@@ -117,6 +117,37 @@ public class ParserTest {
     }
 
     @Test
+    public void parseNestedBasicValuesWithComments() throws OffsetConfigException {
+        String config = """
+                # A block containing an integer and a float
+                iHaveAnIntegerAndAFloat:
+                    # An integer value
+                    anInteger = 1234
+                    # A float value
+                    aFloat = 12.34
+                # A boolean value that's true
+                aTrueBoolean = true
+                # A block containing a boolean and a string
+                iHaveABooleanAndAString:
+                    # A boolean value that's false
+                    aFalseBoolean = false
+                    # A string value
+                    aString = "Hello, World!"
+                """;
+        Map<String, ConfigEntryWithComment> expectedOutput = Map.ofEntries(
+                Map.entry("iHaveAnIntegerAndAFloat", new ConfigEntryWithComment("A block containing an integer and a float")),
+                Map.entry("iHaveAnIntegerAndAFloat.anInteger", new ConfigEntryWithComment("An integer value", 1234)),
+                Map.entry("iHaveAnIntegerAndAFloat.aFloat", new ConfigEntryWithComment("A float value", 12.34f)),
+                Map.entry("aTrueBoolean", new ConfigEntryWithComment("A boolean value that's true", true)),
+                Map.entry("iHaveABooleanAndAString", new ConfigEntryWithComment("A block containing a boolean and a string")),
+                Map.entry("iHaveABooleanAndAString.aFalseBoolean", new ConfigEntryWithComment("A boolean value that's false", false)),
+                Map.entry("iHaveABooleanAndAString.aString", new ConfigEntryWithComment("A string value", "Hello, World!"))
+        );
+
+        runTestWithComments(config, expectedOutput);
+    }
+
+    @Test
     public void parseMultiNestedBasicValues() throws OffsetConfigException {
         String config = """
                 iHaveAnIntegerAndANestedFloat:  

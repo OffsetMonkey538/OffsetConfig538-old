@@ -16,4 +16,13 @@ public record ConfigEntryWithComment(String comment, Object value) {
     public ConfigEntryWithComment(Object value) {
         this("", value);
     }
+
+    /**
+     * Constructs a new ConfigEntry with an empty value. Useful if you want to add comments to blocks.
+     *
+     * @param comment The comment for the entry.
+     */
+    public ConfigEntryWithComment(String comment) {
+        this(comment, null);
+    }
 }
