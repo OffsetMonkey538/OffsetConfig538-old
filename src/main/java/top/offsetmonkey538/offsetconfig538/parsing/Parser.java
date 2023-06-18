@@ -261,7 +261,7 @@ public class Parser {
         }
 
         // Get the serializer for the type.
-        OffsetConfigSerializer<?> serializer = offsetConfig538.getSerializer(type);
+        OffsetConfigSerializer<?> serializer = offsetConfig538.getSerializerByType(type);
 
         // Check if the serializer wasn't found and throw an error.
         if (serializer == null) throw new OffsetConfigException("No deserializer found for type '%s'!", type);

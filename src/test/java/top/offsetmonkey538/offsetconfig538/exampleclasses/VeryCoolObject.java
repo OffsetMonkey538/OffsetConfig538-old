@@ -1,4 +1,4 @@
-package top.offsetmonkey538.offsetconfig538.exampleClasses;
+package top.offsetmonkey538.offsetconfig538.exampleclasses;
 
 import java.util.Map;
 import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
@@ -25,6 +25,11 @@ public record VeryCoolObject(int anInteger, float aFloat, boolean aTrueBoolean, 
             entries.put("aTrueBoolean", value.aTrueBoolean());
             entries.put("aFalseBoolean", value.aFalseBoolean());
             entries.put("aString", value.aString());
+        }
+
+        @Override
+        public String getType() {
+            return "VeryCoolObject";
         }
     }
 }

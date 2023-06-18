@@ -1,4 +1,4 @@
-package top.offsetmonkey538.offsetconfig538.exampleClasses;
+package top.offsetmonkey538.offsetconfig538.exampleclasses;
 
 import java.util.Arrays;
 import java.util.Map;

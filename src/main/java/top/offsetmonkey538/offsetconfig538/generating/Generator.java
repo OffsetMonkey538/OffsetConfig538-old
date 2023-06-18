@@ -188,9 +188,8 @@ public class Generator {
         builder.append(OffsetConfig538.OBJECT_OPEN).append(lineSeparator);
 
         // Get the serializer
-        String type = getType(value);
-        OffsetConfigSerializer<?> serializer = offsetConfig538.getSerializer(type);
-        if (serializer == null) throw new OffsetConfigException("No serializer found for type '%s'!", type);
+        OffsetConfigSerializer<?> serializer = offsetConfig538.getSerializerByTypeClass(value.getClass());
+        if (serializer == null) throw new OffsetConfigException("No serializer found for type '%s'!", value.getClass());
 
         Map<String, Object> entries = new LinkedHashMap<>();
         serializer.serializeFromObject(entries, value);
@@ -230,15 +229,18 @@ public class Generator {
      * @param value the value whose type to get.
      * @return The name of <code>value</code>s class. Exceptions are "string" for String, "int" for Integer, "float" for Float and "boolean" for Boolean.
      */
-    private String getType(Object value) {
+    private String getType(Object value) throws OffsetConfigException {
         Class<?> valueType = value.getClass();
         if (valueType.isArray()) valueType = valueType.getComponentType();
 
         if (valueType == String.class) return "string";
-        if (valueType == Integer.class) return "int";
-        if (valueType == Float.class) return "float";
-        if (valueType == Boolean.class) return "boolean";
+        if (valueType == Integer.class || valueType == int.class) return "int";
+        if (valueType == Float.class || valueType == float.class) return "float";
+        if (valueType == Boolean.class || valueType == boolean.class) return "boolean";
 
-        return valueType.getName();
+        OffsetConfigSerializer<?> serializer = offsetConfig538.getSerializerByTypeClass(valueType);
+        if (serializer == null) throw new OffsetConfigException("No serialize found for type '%s'!", valueType.getName());
+
+        return serializer.getType();
     }
 }

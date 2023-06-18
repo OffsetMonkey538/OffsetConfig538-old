@@ -4,9 +4,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import top.offsetmonkey538.offsetconfig538.OffsetConfig538;
-import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject;
-import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithArray;
-import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithObject;
+import top.offsetmonkey538.offsetconfig538.exampleclasses.VeryCoolObject;
+import top.offsetmonkey538.offsetconfig538.exampleclasses.VeryCoolObjectWithArray;
+import top.offsetmonkey538.offsetconfig538.exampleclasses.VeryCoolObjectWithObject;
 import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
 import top.offsetmonkey538.offsetconfig538.ConfigEntryWithComment;
 
@@ -314,14 +314,14 @@ public class GeneratorTest {
     @Test
     public void generateObjects() throws OffsetConfigException {
         String expectedOutput = """
-                veryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject {
+                veryCoolObject = TVeryCoolObject {
                     anInteger = 1234
                     aFloat = 12.34
                     aTrueBoolean = true
                     aFalseBoolean = false
                     aString = "Hello, World!"
                 }
-                anotherVeryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject {
+                anotherVeryCoolObject = TVeryCoolObject {
                     anInteger = 4321
                     aFloat = 43.21
                     aTrueBoolean = true
@@ -353,14 +353,14 @@ public class GeneratorTest {
     public void generateNestedObjects() throws OffsetConfigException {
         String expectedOutput = """
                 veryCoolObjects:
-                    veryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject {
+                    veryCoolObject = TVeryCoolObject {
                         anInteger = 1234
                         aFloat = 12.34
                         aTrueBoolean = true
                         aFalseBoolean = false
                         aString = "Hello, World!"
                     }
-                    anotherVeryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject {
+                    anotherVeryCoolObject = TVeryCoolObject {
                         anInteger = 4321
                         aFloat = 43.21
                         aTrueBoolean = true
@@ -391,7 +391,7 @@ public class GeneratorTest {
     @Test
     public void generateObjectWithArray() throws OffsetConfigException {
         String expectedOutput = """
-                veryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithArray {
+                veryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleclasses.VeryCoolObjectWithArray {
                     firstArray = Tint [
                         1234
                         4321
@@ -425,7 +425,7 @@ public class GeneratorTest {
     @Test
     public void generateObjectArray() throws OffsetConfigException {
         String expectedOutput = """
-                myObjectArray = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject [
+                myObjectArray = TVeryCoolObject [
                     {
                         anInteger = 1234
                         aFloat = 12.34
@@ -482,7 +482,7 @@ public class GeneratorTest {
     @Test
     public void generateObjectWithArrayArray() throws OffsetConfigException {
         String expectedOutput = """
-                myObjectArray = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithArray [
+                myObjectArray = Ttop.offsetmonkey538.offsetconfig538.exampleclasses.VeryCoolObjectWithArray [
                     {
                         firstArray = Tint [
                             1
@@ -581,9 +581,9 @@ public class GeneratorTest {
     @Test
     public void parseObjectWithObjectWithArray() throws OffsetConfigException {
         String expectedOutput = """
-                veryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithObject {
+                veryCoolObject = Ttop.offsetmonkey538.offsetconfig538.exampleclasses.VeryCoolObjectWithObject {
                     anInteger = 1234
-                    coolObject = Ttop.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithArray {
+                    coolObject = Ttop.offsetmonkey538.offsetconfig538.exampleclasses.VeryCoolObjectWithArray {
                         firstArray = Tint [
                             1234
                             4321

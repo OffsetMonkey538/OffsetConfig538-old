@@ -53,17 +53,19 @@ public class OffsetConfig538 {
     public static final String KEY_SEPARATOR = ".";
 
 
-    private final Map<String, OffsetConfigSerializer<?>> serializers = new HashMap<>();
+    private final Map<String, OffsetConfigSerializer<?>> serializersByType = new HashMap<>();
+    private final Map<Class<?>, OffsetConfigSerializer<?>> serializersByTypeClass = new HashMap<>();
 
     /**
-     * Adds the provided serializers to the serializer map.
+     * Adds the provided serializers to both of the serializer maps.
      *
      * @param serializers The serializers to add.
      * @return this.
      */
     public OffsetConfig538 addSerializer(OffsetConfigSerializer<?>... serializers) {
         for (OffsetConfigSerializer<?> serializer : serializers) {
-            this.serializers.put(serializer.getType(), serializer);
+            this.serializersByType.put(serializer.getType(), serializer);
+            this.serializersByTypeClass.put(serializer.getTypeClass(), serializer);
         }
         return this;
     }
@@ -74,8 +76,12 @@ public class OffsetConfig538 {
      * @param type the type the serializer should be.
      * @return the serializer for the provided type.
      */
-    public OffsetConfigSerializer<?> getSerializer(String type) {
-        return this.serializers.get(type);
+    public OffsetConfigSerializer<?> getSerializerByType(String type) {
+        return this.serializersByType.get(type);
+    }
+
+    public OffsetConfigSerializer<?> getSerializerByTypeClass(Class<?> typeClass) {
+        return this.serializersByTypeClass.get(typeClass);
     }
 
     /**
