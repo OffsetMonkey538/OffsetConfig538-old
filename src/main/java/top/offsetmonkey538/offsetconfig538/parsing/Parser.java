@@ -231,9 +231,6 @@ public class Parser {
     private Object parseObject(String type) throws OffsetConfigException {
         Map<String, Object> objectContent = new LinkedHashMap<>();
 
-        int numObjectOpen = 1;
-        int numObjectClose = 0;
-
         // Increment current line as we don't want to
         // continuously parse this object and get a stack overflow.
         currentLineNumber++;
@@ -241,23 +238,21 @@ public class Parser {
         for (; currentLineNumber < lines.length; currentLineNumber++) {
             String line = lines[currentLineNumber].trim();
 
-            // Increment object open and close counters.
-            if (line.endsWith(OffsetConfig538.OBJECT_OPEN)) numObjectOpen++;
-            if (line.endsWith(OffsetConfig538.OBJECT_CLOSE)) numObjectClose++;
-
             // The object is finished when we encounter
             // an equal number of open and close characters.
-            if (numObjectOpen == numObjectClose) break;
+            if (line.endsWith(OffsetConfig538.OBJECT_CLOSE)) break;
 
             // Nesting isn't supported in objects.
             if (line.endsWith(OffsetConfig538.BLOCK_START_INDICATOR)) throw new OffsetConfigException("Expected value of type '%s' in object at line '%s', but got a block start!", type, currentLineNumber);
 
             // Skip array and object endings as those aren't values.
-            if (line.endsWith(OffsetConfig538.OBJECT_CLOSE) || line.endsWith(OffsetConfig538.ARRAY_CLOSE)) continue;
+            if (line.endsWith(OffsetConfig538.ARRAY_CLOSE)) continue;
 
             // Parse the value.
             String key = getKey(line);
-            objectContent.put(key, parseValue(line));
+            Object value = parseValue(line);
+
+            objectContent.put(key, value);
         }
 
         // Get the serializer for the type.
