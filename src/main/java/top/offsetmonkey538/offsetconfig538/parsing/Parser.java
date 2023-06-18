@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Stack;
 import top.offsetmonkey538.offsetconfig538.OffsetConfig538;
 import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
+import top.offsetmonkey538.offsetconfig538.generating.ConfigEntry;
 import top.offsetmonkey538.offsetconfig538.serialization.OffsetConfigSerializer;
 
 /**
@@ -33,9 +34,21 @@ public class Parser {
      * @param content The config content. Should contain line endings.
      * @return the provided content as a map of String key to Object value.
      * @throws OffsetConfigException when something goes wrong when parsing the content.
+     * @see #parse(String)
      */
-    public Map<String, Object> parse(String content) throws OffsetConfigException {
-        final Map<String, Object> entries = new LinkedHashMap<>();
+    public Map<String, Object> parseWithoutComments(String content) throws OffsetConfigException {
+        final Map<String, ConfigEntry> entries = parse(content);
+        final Map<String, Object> entriesWithoutComments = new LinkedHashMap<>(entries.size());
+
+        for (Map.Entry<String, ConfigEntry> entry : entries.entrySet()) {
+            entriesWithoutComments.put(entry.getKey(), entry.getValue().value());
+        }
+
+        return entriesWithoutComments;
+    }
+
+    public Map<String, ConfigEntry> parse(String content) throws OffsetConfigException {
+        final Map<String, ConfigEntry> entries = new LinkedHashMap<>();
 
         // Split content at CR/LF (Windows line-ending) or LF (Unix line-ending).
         this.lines = content.split("\\r?\\n");
@@ -43,16 +56,25 @@ public class Parser {
         // Store the current parent in a stack.
         final Stack<String> parentStack = new Stack<>();
 
+        // Store the comment
+        String comment = "";
+
         for (currentLineNumber = 0; currentLineNumber < lines.length; currentLineNumber++) {
             String line = lines[currentLineNumber];
             String trimmedLine = line.trim();
 
-            // Skip empty lines and comments.
-            if (trimmedLine.isEmpty() || trimmedLine.startsWith(OffsetConfig538.COMMENT_PREFIX)) {
+            // Skip empty lines.
+            if (trimmedLine.isEmpty()) {
                 continue;
             }
 
-            // Get our indentation level
+            // Store comment for later.
+            if (trimmedLine.startsWith(OffsetConfig538.COMMENT_PREFIX)) {
+                comment = trimmedLine.substring(1).trim();
+                continue;
+            }
+
+            // Get our indentation level.
             final int indentLevel = getIndentation(line);
 
             // If we are on a lower level of indentation from our parent,
@@ -75,7 +97,7 @@ public class Parser {
 
             // Parse the value and add it to the entries map
             Object value = parseValue(line);
-            entries.put(key, value);
+            entries.put(key, new ConfigEntry(comment, value));
         }
 
         return entries;

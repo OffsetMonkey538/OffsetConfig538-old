@@ -6,6 +6,7 @@ import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObject;
 import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithArray;
 import top.offsetmonkey538.offsetconfig538.exampleClasses.VeryCoolObjectWithObject;
 import top.offsetmonkey538.offsetconfig538.exception.OffsetConfigException;
+import top.offsetmonkey538.offsetconfig538.generating.ConfigEntry;
 import top.offsetmonkey538.offsetconfig538.util.ArrayUtils;
 
 import java.util.Map;
@@ -35,6 +36,31 @@ public class ParserTest {
         );
 
         runTest(config, expectedOutput);
+    }
+
+    @Test
+    public void parseBasicValuesWithComments() throws OffsetConfigException {
+        String config = """
+                # This is an integer
+                anInteger = 1234
+                # This is a float
+                aFloat = 12.34
+                # This is a boolean which is true
+                aTrueBoolean = true
+                # This is a boolean which is false
+                aFalseBoolean = false
+                # This is a string
+                aString = "Hello, World!"
+                """;
+        Map<String, ConfigEntry> expectedOutput = Map.ofEntries(
+                Map.entry("anInteger", new ConfigEntry("This is an integer", 1234)),
+                Map.entry("aFloat", new ConfigEntry("This is a float", 12.34f)),
+                Map.entry("aTrueBoolean", new ConfigEntry("This is a boolean which is true", true)),
+                Map.entry("aFalseBoolean", new ConfigEntry("This is a boolean which is false", false)),
+                Map.entry("aString", new ConfigEntry("This is a string", "Hello, World!"))
+        );
+
+        runTestWithComments(config, expectedOutput);
     }
 
     @Test
@@ -612,15 +638,26 @@ public class ParserTest {
 
 
 
+    private void runTestWithComments(String config, Map<String, ConfigEntry> expectedOutput) throws OffsetConfigException {
+        Map<String, ConfigEntry> actualOutput = offsetConfig538.getParser().parse(config);
+
+        for (Map.Entry<String, ConfigEntry> entry : expectedOutput.entrySet()) {
+            String key = entry.getKey();
+            Object expectedValue = entry.getValue();
+            Object actualValue = actualOutput.get(key);
+
+            if (expectedValue.getClass().isArray() && actualValue.getClass().isArray()) runTestOnArray(expectedValue, actualValue);
+            else assertEquals(expectedValue, actualValue);
+        }
+    }
+
     private void runTest(String config, Map<String, Object> expectedOutput) throws OffsetConfigException {
-        Map<String, Object> actualOutput = offsetConfig538.getParser().parse(config);
+        Map<String, Object> actualOutput = offsetConfig538.getParser().parseWithoutComments(config);
 
         for (Map.Entry<String, Object> entry : expectedOutput.entrySet()) {
             String key = entry.getKey();
             Object expectedValue = entry.getValue();
             Object actualValue = actualOutput.get(key);
-
-            System.out.println("key: " + key);
 
             if (expectedValue.getClass().isArray() && actualValue.getClass().isArray()) runTestOnArray(expectedValue, actualValue);
             else assertEquals(expectedValue, actualValue);
