@@ -1,3 +1,8 @@
+Turns out I was making a custom config format two years ago? Seems like it was even working? Well there must've been something that made me give up on it?  
+Anyway the actual config library I use is here: https://github.com/OffsetMods538/OffsetConfig538
+
+Oh, and here's the original description:
+
 # OffsetConfig538
 [![](https://jitpack.io/v/top.offsetmonkey538/OffsetConfig538.svg)](https://jitpack.io/#top.offsetmonkey538/OffsetConfig538)
 ## Why?
